@@ -1,7 +1,11 @@
+# load packages
 using HDF5
 using PyPlot
 using DSP
 using Interpolations
+using DelimitedFiles
+using FFTW
+
 
 #H1_16_32 = h5open("/dataset/H-H1_LOSC_16_V1-1126259446-32.hdf5", "r");
 H1_4_32 = h5open("dataset/H-H1_LOSC_4_V1-1126259446-32.hdf5", "r");
@@ -52,7 +56,7 @@ function whiten(strain,psd_,i)
   freq = rfftfreq(strain_len,i)
   hf = rfft(strain)
   white_ft = Complex{Float64}[]
-  asd = sqrt(psd_[freq] /i/2.)
+  asd = sqrt.(psd_[freq] /i/2.)
   for i=1:length(hf)
     push!(white_ft,hf[i]/asd[i])
   end
